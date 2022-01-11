@@ -35,7 +35,7 @@ class ImageController extends AbstractController {
         $json = $serializer->serialize($data, 'json');
         //return new JsonResponse(json_encode($json), Response::HTTP_OK);
 
-        return new Response($json, Response::HTTP_OK);
+        return JsonResponse::fromJsonString($json, Response::HTTP_OK);
     }
 
 
@@ -47,8 +47,6 @@ class ImageController extends AbstractController {
         $json = $serializer->serialize($data, 'json');
 
         return JsonResponse::fromJsonString($json, Response::HTTP_OK);
-
-        //return new Response($json, Response::HTTP_OK);
     }
 
     /**

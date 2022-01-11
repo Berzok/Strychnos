@@ -64,7 +64,9 @@ class BasePixivAPI {
         if (!in_array('curl', get_loaded_extensions())) {
             throw new Exception('You need to install cURL, see: http://curl.haxx.se/docs/install.html');
         }
+    }
 
+    public function init(){
         $this->headers['Authorization'] .= getenv('PIXIV_BEARER');
         $this->client_id = getenv('PIXIV_CLIENT_ID');
         $this->client_secret = getenv('PIXIV_CLIENT_SECRET');

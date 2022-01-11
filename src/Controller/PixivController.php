@@ -48,6 +48,8 @@ class PixivController extends AbstractController {
         $array = explode('.', $uri);
         $extension = array_pop($array);
 
+        $this->pixiv->init();
+
         $this->pixiv->refreshAccessToken($this->getParameter('pixiv.refresh'));
         $image = $this->pixiv->fetch_source($uri);
         $data = $this->pixiv->imageToBase64($image, $extension);
@@ -69,6 +71,8 @@ class PixivController extends AbstractController {
 
         $array = explode('.', $url);
         $extension = array_pop($array);
+
+        $this->pixiv->init();
 
         $this->pixiv->refreshAccessToken($this->getParameter('pixiv.refresh'));
         $image = $this->pixiv->fetch_source($url);
@@ -92,6 +96,8 @@ class PixivController extends AbstractController {
         $extension = $request->toArray()['extension'];
 
         $fullpath = $path . $filename . $extension;
+
+        $this->pixiv->init();
 
         $this->pixiv->refreshAccessToken($this->getParameter('pixiv.refresh'));
         $image = $this->pixiv->fetch_source($url);

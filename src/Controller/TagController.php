@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Json;
 
 class TagController extends AbstractController {
 
@@ -20,7 +21,7 @@ class TagController extends AbstractController {
 
         $json = $serializer->serialize($data, 'json');
 
-        return new Response($json, Response::HTTP_OK);
+        return JsonResponse::fromJsonString($json, Response::HTTP_OK);
     }
 
 
@@ -31,7 +32,7 @@ class TagController extends AbstractController {
 
         $json = $serializer->serialize($data, 'json');
 
-        return new Response($json, Response::HTTP_OK);
+        return JsonResponse::fromJsonString($json, Response::HTTP_OK);
     }
 
 
