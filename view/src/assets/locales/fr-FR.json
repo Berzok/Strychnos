@@ -1,0 +1,18 @@
+{
+  "authenticate": {
+    "login": "connexion",
+    "register": "enregistrement",
+    "sucessMessage": "bienvenue",
+    "failMessage": "erreur: identifiant ou mot de passe incorrect"
+  },
+  "login": {
+    "login": "identifiant",
+    "password": "mot de passe"
+  },
+  "register": {
+    "lastName": "nom de famille",
+    "firstName": "prenom",
+    "login": "identifiant",
+    "password": "mot de passe"
+  }
+}

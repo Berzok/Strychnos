@@ -1,0 +1,25 @@
+.col-1-5{
+    width: 12.44445%;
+}
+.img-thumbnail{
+    border: 2px solid darkgrey;
+    padding: 0;
+}
+.list-group-item{
+    background-color: transparent;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.navbar{
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+.table{
+    color: thistle;
+    --bs-table-accent-bg: transparent;
+}
+
+.awesomplete > ul{
+    background: transparent !important;
+    border: 1px solid #375A7F !important;
+}
