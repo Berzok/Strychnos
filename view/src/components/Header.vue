@@ -1,7 +1,7 @@
 <template>
   <nav id="header" class="d-flex justify-content-between border-bottom border-info">
 
-    <router-link to="/" class="thumbnail my-auto">
+    <router-link to="/" class="thumbnail my-auto text-center">
       <img
         src="/neika.png"
         class="img-fluid h-100"
@@ -13,7 +13,7 @@
 
       <div class="my-auto fs-3">
         <router-link to="/" class="nav-link">
-          <div class="d-flex flex-column">
+          <div class="d-flex flex-column text-center">
             <span class="fas fa-torii-gate me-1"></span>
             Accueil
           </div>
@@ -22,7 +22,7 @@
 
       <div class="my-auto fs-3">
         <router-link to="/images" class="nav-link">
-          <div class="d-flex flex-column">
+          <div class="d-flex flex-column text-center">
             <span class="far fa-images"></span>
             Images
           </div>
@@ -31,7 +31,7 @@
 
       <div class="my-auto fs-3">
         <router-link to="/profile" class="nav-link">
-          <div class="d-flex flex-column">
+          <div class="d-flex flex-column text-center">
             <span class="fas fa-tags"></span>
             Tags
           </div>
@@ -40,7 +40,7 @@
 
       <div class="my-auto fs-3">
         <router-link to="/upload" class="nav-link">
-          <div class="d-flex flex-column">
+          <div class="d-flex flex-column text-center">
             <span class="fas fa-upload"></span>
             Upload
           </div>

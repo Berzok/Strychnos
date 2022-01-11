@@ -41,18 +41,18 @@ class PixivController extends AbstractController {
      * @throws Exception
      */
     #[Route('/pixiv/original', name: 'pixiv_source')]
-    public function getSource(Request $request, SerializerInterface $serializer): Response {
+    public function getSource(Request $request, SerializerInterface $serializer, PixivAPI $pixiv): Response {
         $image = $request->toArray()['image'];
         $uri = $image['url'];
 
         $array = explode('.', $uri);
         $extension = array_pop($array);
 
-        $this->pixiv->init();
+        $pixiv->init();
 
-        $this->pixiv->refreshAccessToken($this->getParameter('pixiv.refresh'));
-        $image = $this->pixiv->fetch_source($uri);
-        $data = $this->pixiv->imageToBase64($image, $extension);
+        $pixiv->refreshAccessToken($this->getParameter('pixiv.refresh'));
+        $image = $pixiv->fetch_source($uri);
+        $data = $pixiv->imageToBase64($image, $extension);
 
         //$pixiv = new PixivAppAPI;
         //$pixiv->refreshAccessToken($this->getParameter('pixiv.refresh'));
@@ -66,17 +66,17 @@ class PixivController extends AbstractController {
 
 
     #[Route('/pixiv/image_b64', name: 'pixiv_base64')]
-    public function getBase64(Request $request, SerializerInterface $serializer): Response {
+    public function getBase64(Request $request, SerializerInterface $serializer, PixivAPI $pixiv): Response {
         $url = $request->toArray()['url'];
 
         $array = explode('.', $url);
         $extension = array_pop($array);
 
-        $this->pixiv->init();
+        $pixiv->init();
 
-        $this->pixiv->refreshAccessToken($this->getParameter('pixiv.refresh'));
-        $image = $this->pixiv->fetch_source($url);
-        $data = $this->pixiv->imageToBase64($image, $extension);
+        $pixiv->refreshAccessToken($this->getParameter('pixiv.refresh'));
+        $image = $pixiv->fetch_source($url);
+        $data = $pixiv->imageToBase64($image, $extension);
 
         $json = $serializer->serialize($data, 'json');
 

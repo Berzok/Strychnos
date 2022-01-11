@@ -49,12 +49,12 @@ class BasePixivAPI {
     /**
      * @var string|null
      */
-    protected ?string $access_token = null;
+    protected ?string $access_token = '';
 
     /**
      * @var string|null
      */
-    protected ?string $refresh_token = null;
+    protected ?string $refresh_token = '';
 
 
     /**
@@ -67,10 +67,10 @@ class BasePixivAPI {
     }
 
     public function init(){
-        $this->headers['Authorization'] .= getenv('PIXIV_BEARER');
-        $this->client_id = getenv('PIXIV_CLIENT_ID');
-        $this->client_secret = getenv('PIXIV_CLIENT_SECRET');
-        $this->hash_secret = getenv('PIXIV_HASH_SECRET');
+        $this->headers['Authorization'] .= $_ENV['PIXIV_BEARER'];
+        $this->client_id = $_ENV['PIXIV_CLIENT_ID'];
+        $this->client_secret = $_ENV['PIXIV_CLIENT_SECRET'];
+        $this->hash_secret = $_ENV['PIXIV_HASH_SECRET'];
     }
 
 

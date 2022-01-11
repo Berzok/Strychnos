@@ -3,7 +3,7 @@
 
     <br>
 
-    <img src="homepage.jpg" class="img-fluid w-75" alt="Safebooru">
+    <img src="/homepage.jpg" class="img-fluid w-75" alt="Safebooru">
 
     <div class="d-flex justify-content-center my-3">
       <router-link to="/images" class="nav-link">
