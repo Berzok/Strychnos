@@ -12,7 +12,7 @@
     <div class="d-flex flex-fill justify-content-around align-content-stretch">
 
       <div class="my-auto fs-3">
-        <router-link to="/" class="nav-link">
+        <router-link :to="{name: 'Home'}" class="nav-link">
           <div class="d-flex flex-column text-center">
             <span class="fas fa-torii-gate me-1"></span>
             Accueil
@@ -20,32 +20,27 @@
         </router-link>
       </div>
 
-      <div class="my-auto fs-3">
-        <router-link to="/images" class="nav-link">
-          <div class="d-flex flex-column text-center">
-            <span class="far fa-images"></span>
-            Images
-          </div>
-        </router-link>
-      </div>
 
-      <div class="my-auto fs-3">
-        <router-link to="/profile" class="nav-link">
-          <div class="d-flex flex-column text-center">
-            <span class="fas fa-tags"></span>
-            Tags
-          </div>
-        </router-link>
-      </div>
+      <router-link :to="{name: 'list'}" class="nav-link fs-3">
+        <div class="d-flex flex-column my-3 text-center">
+          <span class="far fa-images"></span>
+          Images
+        </div>
+      </router-link>
 
-      <div class="my-auto fs-3">
-        <router-link to="/upload" class="nav-link">
-          <div class="d-flex flex-column text-center">
-            <span class="fas fa-upload"></span>
-            Upload
-          </div>
-        </router-link>
-      </div>
+      <router-link to="/tags" class="nav-link fs-3">
+        <div class="d-flex flex-column my-3 text-center">
+          <span class="fas fa-tags"></span>
+          Tags
+        </div>
+      </router-link>
+
+      <router-link to="/upload" class="nav-link fs-3">
+        <div class="d-flex flex-column my-3 text-center">
+          <span class="fas fa-upload"></span>
+          Upload
+        </div>
+      </router-link>
     </div>
 
     <router-link to="/profile">
@@ -91,9 +86,15 @@ nav {
     padding-top: 0;
     padding-bottom: 0;
     transition: 0.5s;
+    box-sizing: border-box;
 }
-.nav-link:hover{
+
+.nav-link:hover {
     color: crimson;
+}
+
+.router-link-active {
+    border: 1px solid moccasin;
 }
 
 .thumbnail {

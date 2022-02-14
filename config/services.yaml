@@ -4,8 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    pixiv.auth: '7iF5GTyXcnE0jRE3udT3GT7zZ3ty4PBdDZdfkhFODQM'
-    pixiv.refresh: 'Cx6AR6h46nZ66D9vkCpQ7aYECuZlXKZsqupjFGP-7Ek'
+    pixiv.auth: '%env(PIXIV_AUTH)%'
+    pixiv.refresh: '%env(PIXIV_REFRESH)%'
 
 services:
     # default configuration for services in *this* file

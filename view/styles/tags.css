@@ -1,15 +1,15 @@
 .tag-copyright{
-    color: purple;
+    color: purple !important;
 }
 .tag-character{
-    color: green;
+    color: green !important;
 }
 .tag-artist{
-    color: coral;
+    color: coral !important;
 }
 .tag-general{
-    color: #36E1F2;
+    color: #36E1F2 !important;
 }
 .tag-meta{
-    color: teal;
+    color: teal !important;
 }

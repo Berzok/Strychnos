@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { useStore as useUserStore } from './../store/modules/user';
 import Home from '../views/Home.vue';
 import Upload from "../components/upload/Upload";
+import Tags from "../components/tags/Tags";
 export const LOGIN_PAGE_NAME = 'login';
 export const HOME_PAGE_NAME = 'Home';
 const routes = [
@@ -45,6 +46,11 @@ const routes = [
                 component: () => import('../components/image/ImageView.vue'),
             },
         ]
+    },
+    {
+        path: '/tags',
+        name: 'tags',
+        component: Tags
     },
     {
         path: '/authenticate',
