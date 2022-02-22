@@ -41,10 +41,16 @@ class ImageController extends BaseController {
             $data = $repository->findByTags($tags[0]);
 
         } else{
-            $data = $repository->findBy([], ['id' => 'DESC'], $limit, $offset);
+            //$data = $repository->findBy([], ['id' => 'DESC'], $limit, $offset);
+            $data = $repository->findBy([], ['id' => 'DESC']);
         }
+        $length = count($data);
 
-        $json = $this->serializer->serialize($data, 'json');
+        $data = array_slice($data, $offset, $limit);
+        $fdata['images'] = $data;
+        $fdata['count'] = $length;
+
+        $json = $this->serializer->serialize($fdata, 'json');
         //return new Response('ok', Response::HTTP_OK);
         return JsonResponse::fromJsonString($json, Response::HTTP_OK);
     }

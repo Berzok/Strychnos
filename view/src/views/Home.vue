@@ -6,7 +6,7 @@
     <img src="/homepage.jpg" class="img-fluid w-75" alt="Safebooru">
 
     <div class="d-flex justify-content-center my-3">
-      <router-link to="/images" class="nav-link">
+      <router-link to="/list" class="nav-link">
         <span class="far fa-images"></span>
         Images
       </router-link>

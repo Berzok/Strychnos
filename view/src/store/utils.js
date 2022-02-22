@@ -50,8 +50,8 @@ const useStore = defineStore('utils', {
                 }
             }).then((response, error) => {
                 this.tagsToSearch = [];
-                this.images = response.data;
-                this.imagesCount = this.images.length;
+                this.images = response.data.images;
+                this.imagesCount = response.data.count;
                 let tags = [];
                 this.images.forEach((i) => {
                     tags = Array.prototype.concat(tags, i.tags);
