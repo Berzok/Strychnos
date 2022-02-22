@@ -7,7 +7,7 @@ import path from 'path';
 process.env = {...process.env, ...loadEnv('development', process.cwd())};
 
 export default defineConfig({
-    base: '',
+    base: '/',
     build: {
         outDir: 'dist'
     },

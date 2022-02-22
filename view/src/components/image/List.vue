@@ -49,6 +49,9 @@ export default defineComponent({
             return this.utilsStore.images;
         },
         page(){
+            if(!this.$route.params.page){
+                this.$route.params.page = 0;
+            }
             return this.$route.params.page;
         },
         totalRecords(){
@@ -57,9 +60,6 @@ export default defineComponent({
     },
     mounted() {
         this.getTotal();
-        if(!this.$route.params.page){
-            this.$route.params.page = 1;
-        }
         //this.page = parseInt(this.$route.params.page);
         this.utilsStore.fetchImages(this.size, this.size * this.page);
     },
