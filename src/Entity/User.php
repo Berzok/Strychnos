@@ -144,7 +144,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
      *
      * @return string[] The user roles
      */
-    public function getRoles() {
+    public function getRoles() : array {
         // TODO: Implement getRoles() method.
         return ['2'];
     }
@@ -158,7 +158,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
      *
      * @return string|null The salt
      */
-    public function getSalt() {
+    public function getSalt(): ?string {
         // TODO: Implement getSalt() method.
     }
 

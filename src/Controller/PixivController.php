@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Image;
 use App\Service\PixivAPI;
 use Curl\Curl;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 use JMS\Serializer\SerializerInterface;
@@ -15,11 +16,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Log\Logger;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PixivController extends AbstractController {
+class PixivController extends BaseController {
 
     private PixivAPI $pixiv;
 
-    public function __construct(PixivAPI $pixiv) {
+    public function __construct(ManagerRegistry $doctrine, SerializerInterface $serializer, PixivAPI $pixiv) {
+        parent::__construct($doctrine, $serializer);
         $this->pixiv = $pixiv;
     }
 
@@ -27,12 +29,12 @@ class PixivController extends AbstractController {
      * @throws Exception
      */
     #[Route('/pixiv/get/{id}', name: 'pixiv_details')]
-    public function getDetails(int $id, SerializerInterface $serializer): Response {
+    public function getDetails(int $id): Response {
         $this->pixiv->refreshAccessToken($this->getParameter('pixiv.refresh'));
         $data = $this->pixiv->illust_detail($id);
         $data = $data['illust'];
 
-        $json = $serializer->serialize($data, 'json');
+        $json = $this->serializer->serialize($data, 'json');
 
         return new Response($json, Response::HTTP_OK, ['content-type' => 'application/json']);
     }
@@ -41,7 +43,7 @@ class PixivController extends AbstractController {
      * @throws Exception
      */
     #[Route('/pixiv/original', name: 'pixiv_source')]
-    public function getSource(Request $request, SerializerInterface $serializer, PixivAPI $pixiv): Response {
+    public function getSource(Request $request, PixivAPI $pixiv): Response {
         $image = $request->toArray()['image'];
         $uri = $image['url'];
 
@@ -59,14 +61,14 @@ class PixivController extends AbstractController {
         //$data = $pixiv->illust_detail(explode('/', $request->toArray()['image']['source'])[count(explode('/', $request->toArray()['image']['source'])) - 1]);
         //$data = $this->pixiv->illust_detail(explode('/', $request->toArray()['image']['source'])[count(explode('/', $request->toArray()['image']['source'])) - 1]);
 
-        $json = $serializer->serialize($data, 'json');
+        $json = $this->serializer->serialize($data, 'json');
 
         return new Response($json, Response::HTTP_OK, ['content-type' => 'application/json']);
     }
 
 
     #[Route('/pixiv/image_b64', name: 'pixiv_base64')]
-    public function getBase64(Request $request, SerializerInterface $serializer, PixivAPI $pixiv): Response {
+    public function getBase64(Request $request, PixivAPI $pixiv): Response {
         $url = $request->toArray()['url'];
 
         $array = explode('.', $url);
@@ -78,7 +80,7 @@ class PixivController extends AbstractController {
         $image = $pixiv->fetch_source($url);
         $data = $pixiv->imageToBase64($image, $extension);
 
-        $json = $serializer->serialize($data, 'json');
+        $json = $this->serializer->serialize($data, 'json');
 
         return new Response($json, Response::HTTP_OK, ['content-type' => 'application/json']);
     }
@@ -87,7 +89,7 @@ class PixivController extends AbstractController {
      * @throws ImagickException
      */
     #[Route('/pixiv/download', name: 'pixiv_upload')]
-    public function download(Request $request, SerializerInterface $serializer): Response {
+    public function download(Request $request): Response {
         $path = './../public/uploads/';
         //return new Response('<pre>' . print_r($params) . '</pre>');
 
@@ -123,7 +125,7 @@ class PixivController extends AbstractController {
         imagejpeg($image, $fullpath, 80);
 
 
-        $json = $serializer->serialize('ok', 'json');
+        $json = $this->serializer->serialize('ok', 'json');
 
         return new Response($json, Response::HTTP_OK, ['content-type' => 'application/json']);
     }

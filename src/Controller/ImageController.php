@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use GdImage;
 use Imagick;
 use ImagickException;
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,28 +24,38 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ImageController extends AbstractController {
+class ImageController extends BaseController {
 
     #[Route('/images', name: 'images')]
-    public function getAll(SerializerInterface $serializer): Response {
-        $repository = $this->getDoctrine()->getRepository(Image::class);
-        $data = $repository->findBy([], [
-            'id' => 'DESC'
-        ]);
+    public function findAll(Request $request): Response {
+        $tags = $request->get('tags') ?: null;
+        $limit = $request->get('limit') ?: null;
+        $offset = $request->get('offset') ?: null;
+        $repository = $this->doctrine->getRepository(Image::class);
 
-        $json = $serializer->serialize($data, 'json');
-        //return new JsonResponse(json_encode($json), Response::HTTP_OK);
+        if(!is_null($tags)){
+            $tags = explode('+', $tags);
+            foreach($tags as &$t){
+                $t = $this->doctrine->getRepository(Tag::class)->findOneBy([ 'name' => $t ]);
+            }
+            $data = $repository->findByTags($tags[0]);
 
+        } else{
+            $data = $repository->findBy([], ['id' => 'DESC'], $limit, $offset);
+        }
+
+        $json = $this->serializer->serialize($data, 'json');
+        //return new Response('ok', Response::HTTP_OK);
         return JsonResponse::fromJsonString($json, Response::HTTP_OK);
     }
 
 
     #[Route('/image/get/{id}', name: 'get_image', methods: ['GET'])]
-    public function getOne(int $id, SerializerInterface $serializer): Response {
-        $repository = $this->getDoctrine()->getRepository(Image::class);
+    public function findOne(int $id): Response {
+        $repository = $this->doctrine->getRepository(Image::class);
         $data = $repository->find($id);
 
-        $json = $serializer->serialize($data, 'json');
+        $json = $this->serializer->serialize($data, 'json');
 
         return JsonResponse::fromJsonString($json, Response::HTTP_OK);
     }
@@ -54,8 +65,8 @@ class ImageController extends AbstractController {
      * @throws NoResultException
      */
     #[Route('/images/count', name: 'get_count')]
-    public function getCount(SerializerInterface $serializer): Response {
-        $repository = $this->getDoctrine()->getRepository(Image::class);
+    public function getCount(): Response {
+        $repository = $this->doctrine->getRepository(Image::class);
         $data = $repository
             ->createQueryBuilder('i')
             ->select('count(i.id)')
@@ -67,7 +78,7 @@ class ImageController extends AbstractController {
 
     #[Route('/image/file/{id}', name: 'get_raw')]
     public function serveImage(int $id): mixed {
-        $image = $this->getDoctrine()->getRepository(Image::class)->find($id);
+        $image = $this->doctrine->getRepository(Image::class)->find($id);
         $file = 'uploads/' . $image->getFilename();
 
         return new BinaryFileResponse($file);
@@ -75,13 +86,12 @@ class ImageController extends AbstractController {
 
     /**
      * @param Request $request
-     * @param SerializerInterface $serializer
      * @return Response
      */
     #[Route('/image/create', name: 'create_image')]
-    public function create(Request $request, SerializerInterface $serializer): Response {
-        $em = $this->getDoctrine()->getManager();
-        $artist_repository = $this->getDoctrine()->getRepository(Artist::class);
+    public function create(Request $request): Response {
+        $em = $this->doctrine->getManager();
+        $artist_repository = $this->doctrine->getRepository(Artist::class);
 
         $params = $request->toArray();
         $filename = $params['filename'];
@@ -114,9 +124,9 @@ class ImageController extends AbstractController {
 
 
     #[Route('/image/update', name: 'update_image')]
-    public function save(Request $request, SerializerInterface $serializer): Response{
-        $em = $this->getDoctrine()->getManager();
-        $tag_repository = $this->getDoctrine()->getRepository(Tag::class);
+    public function save(Request $request): Response{
+        $em = $this->doctrine->getManager();
+        $tag_repository = $this->doctrine->getRepository(Tag::class);
 
         $params = $request->toArray();
         $id = $params['id'];
@@ -136,7 +146,7 @@ class ImageController extends AbstractController {
         $em->persist($image);
         $em->flush();
 
-        $json = $serializer->serialize($tags, 'json');
+        $json = $this->serializer->serialize($tags, 'json');
         return new Response($json, Response::HTTP_OK);
     }
 

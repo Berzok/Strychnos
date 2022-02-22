@@ -61,7 +61,7 @@ class Artist {
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Image", mappedBy="artist")
+     * @ORM\OneToMany(targetEntity="Image", mappedBy="artist", fetch="EXTRA_LAZY")
      */
     private $images;
 

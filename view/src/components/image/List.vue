@@ -1,7 +1,15 @@
 <template>
   <div class="text-center">
 
-    <DataView :value="this.images" :layout="'grid'" :paginator="true" :rows="20" class="justify-content-evenly">
+    <DataView :value="this.images"
+              :layout="'grid'"
+              :rows="20"
+              :lazy="true"
+              :paginator="true"
+              :first="this.page * this.size"
+              :totalRecords="this.totalRecords"
+              @page="onPage($event)"
+              class="justify-content-evenly">
       <template #grid="slotProps">
         <ImageThumbnail :image="slotProps.data" class="grid-item mb-4"/>
       </template>
@@ -11,12 +19,13 @@
 </template>
 
 <script lang="js">
-import {useToast} from 'vue-toastification';
 import {defineComponent} from 'vue';
+import {useToast} from 'vue-toastification';
 import axios from 'axios';
-import {useI18n} from 'vue-i18n';
+import {mapActions, mapState} from 'pinia';
 import DataView from 'primevue/dataview';
 import ImageThumbnail from "./ImageThumbnail";
+import {useStore as useUtilsStore} from "@/store/utils";
 
 export default defineComponent({
     name: 'List',
@@ -24,27 +33,49 @@ export default defineComponent({
         ImageThumbnail,
         DataView
     },
+    data(){
+        return {
+            size: 20,
+        }
+    },
     setup() {
         // Get toast interface
         const toast = useToast();
-        const {t, locale} = useI18n();
-        return {toast, t, locale};
+        const utilsStore = useUtilsStore();
+        return {toast, utilsStore};
     },
-    data() {
-        return {
-            images: []
-        };
+    computed: {
+        images(){
+            return this.utilsStore.images;
+        },
+        page(){
+            return this.$route.params.page;
+        },
+        totalRecords(){
+            return this.utilsStore.imagesCount;
+        }
     },
     mounted() {
-        axios.get('/images', {
-            headers: {
-                'Wait': true
-            }
-        }).then((response, error) => {
-            this.images = response.data;
-        });
+        this.getTotal();
+        if(!this.$route.params.page){
+            this.$route.params.page = 1;
+        }
+        //this.page = parseInt(this.$route.params.page);
+        this.utilsStore.fetchImages(this.size, this.size * this.page);
     },
     methods: {
+        onPage(event){
+            this.utilsStore.fetchImages(this.size, this.size * event.page);
+            //this.$router.push(this.$route.path + '/' + event.page);
+            this.$router.push({params: {page: event.page}});
+        },
+        getTotal(){
+            axios.get('/images/count').then((response, error) => {
+                this.utilsStore.imagesCount = response.data;
+                this.imagesCount = response.data;
+                return response.data;
+            });
+        }
     },
 });
 </script>

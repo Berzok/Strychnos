@@ -35,8 +35,8 @@ const routes = [
         component: () => import('./../components/image/Images.vue'),
         children: [
             {
-                path: '',
-                alias: '/list',
+                path: '/list/:page(\\d+)?',
+                alias: 'list',
                 name: 'list',
                 component: () => import('../components/image/List.vue'),
             },

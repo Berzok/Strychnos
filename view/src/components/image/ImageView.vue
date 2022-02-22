@@ -62,16 +62,15 @@
       </div>
     </div>
 
-    <Dialog header="Tags" v-model:visible="this.displayModal" :modal="false" class="w-50">
-
+    <Dialog header="Tags" v-model:visible="this.displayModal" :modal="false" appendTo="self" class="w-50">
       <DataTable v-model:selection="this.image.tags"
                  v-model:filters="this.filters"
-                 :value="this.getTags"
+                 :value="this.tags"
                  :paginator="true"
-                 :rows="10"
+                 :rows="8"
                  :rowHover="true"
                  sortField="oui"
-                 sortOrder="1"
+                 :sortOrder="1"
                  dataKey="id"
                  filterDisplay="menu"
                  responsiveLayout="scroll">
@@ -109,15 +108,13 @@
 import {defineComponent} from 'vue';
 import axios from "axios";
 import {useToast} from "vue-toastification";
-import {useI18n} from "vue-i18n";
-import {useStore} from "./../../store/tags";
-import {useImageStore} from "./../../store/image";
-import {mapState, mapWritableState} from 'pinia';
+import {useStore as useUtilsStore} from "@/store/utils";
+import {useImageStore} from "@/store/image";
 import Button from 'primevue/button';
 import Checkbox from 'primevue/checkbox';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
-import {FilterMatchMode, FilterOperator} from 'primevue/api';
+import {FilterMatchMode} from 'primevue/api';
 import Dialog from "primevue/dialog";
 import InputText from 'primevue/inputtext';
 
@@ -130,20 +127,6 @@ export default defineComponent({
         DataTable,
         Dialog,
         InputText
-    },
-    computed: {
-        ...mapState(useStore, ['getTags']),
-        ...mapWritableState(useImageStore, ['image']),
-        getLocalSource() {
-            if (this.image.id) {
-                return process.env.VITE_API_URL + '/image/file/' + this.image.id
-            }
-            return '';
-        },
-        tags() {
-            const store = useStore();
-            return [store.getTags, []];
-        }
     },
     data() {
         return {
@@ -160,6 +143,37 @@ export default defineComponent({
             selectedTags: null
         }
     },
+    async mounted() {
+        await this.fetchImage(this.$route.params.id);
+        this.fetchOriginalImage();
+    },
+    unmounted() {
+        this.imageStore.$reset();
+    },
+    setup() {
+        // Get toast interface
+        const toast = useToast();
+        const imageStore = useImageStore();
+        const utilsStore = useUtilsStore();
+
+        return {toast, utilsStore, imageStore};
+    },
+    computed: {
+        //...mapState(useUtilsStore, ['getTags']),
+        //...mapWritableState(useImageStore, ['image']),
+        image(){
+            return this.imageStore.image;
+        },
+        tags(){
+            return this.utilsStore.getTags;
+        },
+        getLocalSource() {
+            if (this.image.id) {
+                return process.env.VITE_API_URL + '/image/file/' + this.image.id
+            }
+            return '';
+        }
+    },
     methods: {
         openModal() {
             this.displayModal = true;
@@ -167,55 +181,38 @@ export default defineComponent({
         closeModal() {
             this.displayModal = false;
         },
+        fetchImage(id){
+            return axios.get('/image/get/' + id, {
+                headers: {
+                    'Wait': true
+                }
+            }).then((response) => {
+                this.imageStore.image = response.data;
+                this.utilsStore.currentTags = response.data.tags;
+            });
+        },
+        fetchOriginalImage(){
+            axios.post('/pixiv/original', {image: this.image}).then((response) => {
+                const data = response.data;
+                const type = data.data;
+                const base64 = data.base64;
+                this.oSource = 'data:' + type + ';base64,' + base64;
+                return true;
+            });
+        },
         saveTags() {
             axios.post('/image/update', this.image).then((response, error) => {
                 if(response.status === 200){
                     this.toast.success('Tags mis à jour !');
                     this.closeModal();
                 }
+                this.fetchImage(this.image.id);
             });
-        },
-        matchedTags(event) {
-            axios.get('/tags/match', {
-                params: {
-                    q: event.target.value
-                }
-            }).then((response, error) => {
-                this.aw.list = response.data.map(v => {
-                    return v.name;
-                });
-            });
-            return null;
         },
         switchSource() {
             this.source = (this.source === 'local' ? 'pixiv' : 'local');
         }
-    },
-    async mounted() {
-        const tagStore = useStore();
-        const imageStore = useImageStore();
-        await axios.get('/image/get/' + this.$route.params.id, {
-            headers: {
-                'Wait': true
-            }
-        }).then((response, error) => {
-            imageStore.image = response.data;
-        });
-
-        axios.post('/pixiv/original', {image: this.image}).then((response) => {
-            const data = response.data;
-            const type = data.data;
-            const base64 = data.base64;
-            this.oSource = 'data:' + type + ';base64,' + base64;
-            return true;
-        });
-    },
-    setup() {
-        // Get toast interface
-        const toast = useToast();
-        const {t, locale} = useI18n();
-        return {toast, t, locale};
-    },
+    }
 });
 </script>
 
@@ -235,6 +232,10 @@ export default defineComponent({
 
 ::v-deep(.p-picklist-item) {
     padding: 0.25rem !important;
+}
+
+::v-deep(.p-dialog){
+    border: 1px solid antiquewhite !important;
 }
 
 </style>

@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints\Date;
 
@@ -24,7 +25,7 @@ class Image {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private int $id;
 
 
     /**
@@ -32,35 +33,35 @@ class Image {
      *
      * @ORM\Column(name="filename", type="string", length=255, nullable=true)
      */
-    private $filename;
+    private ?string $filename;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
-    private $url;
+    private ?string $url;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="commentaires", type="string", length=255, nullable=true)
      */
-    private $commentaires;
+    private ?string $commentaires;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="source", type="string", length=255, nullable=true)
      */
-    private $source;
+    private ?string $source;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="uploaded_by", type="integer", nullable=true)
      */
-    private $uploadedBy;
+    private ?int $uploadedBy;
 
     /**
      * @var DateTime|null
@@ -71,8 +72,9 @@ class Image {
 
     /**
      * @var ?Collection
+     * @Serializer\MaxDepth(2)
      *
-     * @ORM\ManyToMany(targetEntity="Tag", cascade={"persist", "remove"})
+     * @ORM\ManyToMany(targetEntity="Tag", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="image_tag",
      *     joinColumns={@ORM\JoinColumn(name="id_image", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="id_tag", referencedColumnName="id", unique=true)}
@@ -87,7 +89,13 @@ class Image {
      * @ORM\ManyToOne(targetEntity="Artist", inversedBy="images", cascade={"persist"})
      * @ORM\JoinColumn(name="id_artist", referencedColumnName="id")
      */
-    private $artist;
+    private ?Artist $artist;
+
+
+    #[Pure]
+    public function __construct(){
+        $this->tags = new ArrayCollection();
+    }
 
 
     public function getId(): ?int {

@@ -10,7 +10,7 @@
 <script lang="js">
 import {defineComponent} from 'vue';
 import {mapWritableState} from 'pinia';
-import {useStore} from "./store/tags";
+import {useStore as useUtilsStore} from "./store/utils";
 import Header from './components/Header.vue';
 import Spinner from './components/Spinner.vue';
 import Navbar from './components/Navbar.vue';

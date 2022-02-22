@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="image_tag")
  * @ORM\Entity
  */
-class ImageTag
-{
+class ImageTag {
     /**
      * @var int
      *

@@ -24,22 +24,22 @@
     "sensio/framework-extra-bundle": "^6.2",
     "spatie/image-optimizer": "^1.6",
     "symfony/apache-pack": "^1.0",
-    "symfony/console": "5.3.*",
-    "symfony/dotenv": "5.3.*",
+    "symfony/console": "6.0.*",
+    "symfony/dotenv": "6.0.*",
     "symfony/flex": "^1.3.1",
-    "symfony/form": "5.3.*",
-    "symfony/framework-bundle": "5.3.*",
-    "symfony/mime": "5.3.*",
-    "symfony/property-access": "5.3.*",
-    "symfony/property-info": "5.3.*",
-    "symfony/proxy-manager-bridge": "5.3.*",
-    "symfony/runtime": "5.3.*",
-    "symfony/security-bundle": "5.3.*",
-    "symfony/serializer": "5.3.*",
-    "symfony/twig-bundle": "5.3.*",
-    "symfony/validator": "5.3.*",
+    "symfony/form": "6.0.*",
+    "symfony/framework-bundle": "6.0.*",
+    "symfony/mime": "6.0.*",
+    "symfony/property-access": "6.0.*",
+    "symfony/property-info": "6.0.*",
+    "symfony/proxy-manager-bridge": "6.0.*",
+    "symfony/runtime": "6.0.*",
+    "symfony/security-bundle": "6.0.*",
+    "symfony/serializer": "6.0.*",
+    "symfony/twig-bundle": "6.0.*",
+    "symfony/validator": "6.0.*",
     "symfony/webpack-encore-bundle": "^1.12",
-    "symfony/yaml": "5.3.*",
+    "symfony/yaml": "6.0.*",
     "twig/extra-bundle": "^2.12|^3.0",
     "twig/twig": "^2.12|^3.0"
   },
@@ -84,7 +84,7 @@
   "extra": {
     "symfony": {
       "allow-contrib": false,
-      "require": "5.3.*"
+      "require": "6.0.*"
     }
   },
   "require-dev": {

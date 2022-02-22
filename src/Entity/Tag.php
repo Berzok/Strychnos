@@ -65,6 +65,7 @@ class Tag {
 
     /**
      * @var TypeTag
+     * @Serializer\MaxDepth(1)
      *
      * @ORM\ManyToOne(targetEntity="TypeTag", inversedBy="tags", cascade={"persist"})
      * @ORM\JoinColumn(name="id_type", referencedColumnName="id")
@@ -74,8 +75,9 @@ class Tag {
 
     /**
      * @var ?Collection
+     * @Serializer\MaxDepth(1)
      *
-     * @ORM\ManyToMany(targetEntity="Image", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="Image", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="image_tag",
      *     joinColumns={@ORM\JoinColumn(name="id_tag", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="id_image", referencedColumnName="id", unique=true)}

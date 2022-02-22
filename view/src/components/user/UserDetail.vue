@@ -2,7 +2,7 @@
   <div class="container mx-auto">
 
     <div class="row">
-      <h1 class="my-4 fw-bold text-info">Informations techniciens</h1>
+      <h1 class="my-4 fw-bold text-info">Informations</h1>
     </div>
 
     <div class="mx-auto w-50">

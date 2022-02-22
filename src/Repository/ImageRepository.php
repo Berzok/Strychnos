@@ -18,6 +18,14 @@ class ImageRepository extends ServiceEntityRepository {
         parent::__construct($registry, Image::class);
     }
 
+    public function findByTags($tag){
+        $qb = $this->createQueryBuilder('i');
+        $qb->setParameter('tag', $tag);
+        $qb->where($qb->expr()->isMemberOf(':tag', 'i.tags'));
+
+        return $qb->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Image[] Returns an array of Image objects
     //  */

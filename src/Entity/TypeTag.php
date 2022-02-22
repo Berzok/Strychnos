@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * TypeTag
@@ -59,12 +60,17 @@ class TypeTag {
     private $createdOn = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var Collection
+     * @var ?Collection
+     * @Serializer\MaxDepth(1)
      *
      * @ORM\OneToMany(targetEntity="Tag", mappedBy="type")
      * @ORM\JoinColumn(name="tags", referencedColumnName="id_type")
      */
-    private Collection $tags;
+    private ?Collection $tags;
+
+    public function __construct(){
+        $this->tags = new ArrayCollection();
+    }
 
     public function getId(): ?int {
         return $this->id;
@@ -76,7 +82,6 @@ class TypeTag {
 
     public function setName(?string $name): self {
         $this->name = $name;
-
         return $this;
     }
 
@@ -86,7 +91,6 @@ class TypeTag {
 
     public function setColour(?string $colour): self {
         $this->colour = $colour;
-
         return $this;
     }
 
@@ -96,7 +100,6 @@ class TypeTag {
 
     public function setDescription(?string $description): self {
         $this->description = $description;
-
         return $this;
     }
 
@@ -106,7 +109,6 @@ class TypeTag {
 
     public function setCreatedBy(int $createdBy): self {
         $this->createdBy = $createdBy;
-
         return $this;
     }
 
@@ -116,7 +118,6 @@ class TypeTag {
 
     public function setCreatedOn(?\DateTimeInterface $createdOn): self {
         $this->createdOn = $createdOn;
-
         return $this;
     }
 

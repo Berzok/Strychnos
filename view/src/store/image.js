@@ -9,7 +9,10 @@ const useImageStore = defineStore('image', {
     }),
     getters: {
         getTags(){
-            return this.tags;
+            return this.image.tags;
+        },
+        getImage(){
+            return this.image;
         }
     },
     actions: {
